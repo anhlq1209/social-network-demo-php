@@ -13,17 +13,28 @@
             $phone = $_POST['phone'];
             $pass = $_POST['password'];
             $cpass = $_POST['confirmPassword'];
-            if (checkUser($mail)) { ?>
+            
+            if ($name == '' || $mail == '' || $phone == '' || $pass == '' || $cpass == '') { ?>
+                <div class="alert alert-warning mt-3" role="alert">
+                    Không được để trống thông tin!!!
+                </div>
+            <?php
+            } elseif (checkUser($mail)) { ?>
                 <div class="alert alert-danger mt-3" role="alert">
                     Email đã được đăng ký!
                 </div>
-    <?php   } elseif ($pass == $cpass) {
+    <?php   } elseif ($pass != $cpass) { ?>
+                <div class="alert alert-danger mt-3" role="alert">
+                    Mật khẩu xác nhận không đúng!
+                </div>
+            <?php            
+            } else {
                 $hashPassword = password_hash($pass, PASSWORD_DEFAULT);
                 $sql = "INSERT INTO users(displayname, email, password, phone) VALUES(?, ?, ?, ?)";
                 $stmt= $db->prepare($sql);
                 $stmt->execute([$name, $mail, $hashPassword, $phone]); ?>
                 <div class="alert alert-success mt-3" role="alert">
-                    Đăng ký tài khoản thành công
+                    Đăng ký tài khoản thành công ;)
                 </div>
                 <?php
             }

@@ -9,14 +9,20 @@
         $userCur = getUserById($_SESSION['userId']);
         if (isset($_POST['form_post_click'])) {
             $content = $_POST['content_post'];
-            $sql = "INSERT INTO posts(user_id, content) VALUES(?, ?)";
-            $stmt= $db->prepare($sql);
-            $stmt->execute([$_SESSION['userId'], $content]);
-    ?>
-            <div class="alert alert-success mt-3" role="alert">
-                Trạng thái của bạn đã được đăng thành công :>
-            </div>
-    <?php
+            
+            if ($content == '') { ?>
+                <div class="alert alert-warning mt-3" role="alert">
+                    Bạn chưa nhập trạng thái!!
+                </div>
+            <?php
+            } else {
+                $stmt = $db->prepare("INSERT INTO posts(user_id, content) VALUES(?, ?)");
+                $stmt->execute(array($userCur['id'], $content)); ?>
+                    <div class="alert alert-success mt-3" role="alert">
+                        Trạng thái của bạn đã được đăng thành công :P
+                    </div>
+            <?php
+            }
         }
     ?>
     <form method="POST">

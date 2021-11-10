@@ -11,14 +11,19 @@ if (isset($_SESSION['userId'])) {
     if (isset($_POST['form_update_profile_click'])) {
         $name = $_POST['name'];
         $phone = $_POST['phone'];
-        $file = 'avatar-default';
+        $file = $userCur['avatar'];
 
-        if (isset($_FILES['avatar'])) {
-            unlink("./assets/images/avatars/".$userCur['avatar']);
+        if ($_FILES['avatar']['name'] != "") {
             $fileName = $_FILES['avatar']['name'];
             $fileName = $userCur['id'].substr($fileName, strpos($fileName, '.', strlen($fileName) - 5), strlen($fileName));
             $fileTemp = $_FILES['avatar']['tmp_name'];
+            unlink("./assets/images/avatars/".$userCur['avatar']);
             $result = move_uploaded_file($fileTemp, './assets/images/avatars/' . $fileName);
+            if ($result)?>
+                <div class="alert alert-success mt-3" role="alert">
+                    Ảnh đại diện đã được cập nhật ;)
+                </div>
+            <?php
             $file = $fileName;
         }
 

@@ -39,7 +39,7 @@
                                 <p class="card-text"><?php echo $post['content'] ?></p>
                             </div>
                             <div class="col-3 pull-items-right">
-                                <a href="./wall?id=<?php echo $userCur['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('./assets/images/avatars/<?php echo $userCur['avatar'] ?>')"></a>
+                                <a href="./wall.php?id=<?php echo $userCur['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('./assets/images/avatars/<?php echo $userCur['avatar'] ?>')"></a>
                             </div>
                         </div>
                     </div>

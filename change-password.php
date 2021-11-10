@@ -11,7 +11,12 @@
             $pass = $_POST['password-old'];
             $newpass = $_POST['password-new'];
             $c_newpass = $_POST['password-new-confirm'];
-            if (checkPassword($pass)) {
+            if ($pass == '' || $newpass == '' || $c_newpass == '') { ?>
+                <div class="alert alert-warning mt-3" role="alert">
+                    Không được để trống thông tin!!!
+                </div>
+            <?php
+            } elseif (checkPassword($pass)) {
                 if ($newpass == $c_newpass) { 
                     $hashNewPassword = password_hash($newpass, PASSWORD_DEFAULT);
                     $sql = "UPDATE users SET password=? WHERE id=?";
