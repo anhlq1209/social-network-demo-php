@@ -5,8 +5,7 @@
 
 <?php include 'header.php' ?>
 
-<?php if (!isset($_SESSION['userId'])) { ?>
-    <?php
+<?php if (!isset($_SESSION['userId'])) {
         if (isset($_POST['form_login_click'])) {
             $mail = $_POST['email'];
             $pass = $_POST['password'];

@@ -6,6 +6,9 @@
 <?php include 'header.php' ?>
 
 <?php if (isset($_SESSION['userId'])) {
+    if (isset($_POST['form_add_friend'])) {
+        var_dump($_POST['form_add_friend']);
+    }
     if (isset($_GET['id'])) {
         $userCur = getUserById($_GET['id']);
         if (!$userCur) { ?>
@@ -22,6 +25,19 @@
         <div class="info">
             <div class="avatar rounded-circle" style="background-image:url('./assets/images/avatars/<?php echo $userCur['avatar'] ?>')"></div>
             <h4 class="mt-3"><?php echo $userCur['displayname'] ?></h4>
+            <?php
+                if (!checkFriend($_SESSION['userId'], $userCur['id'])) { ?>
+                    <form method="POST" action="add-friend.php">
+                        <input type="hidden" class="form-control" id="userCur" name="userCur" value="<?php echo $_SESSION['userId'] ?>">
+                        <input type="hidden" class="form-control" id="userFriend" name="userFriend" value="<?php echo $userCur['id'] ?>">
+                        <button type="submit" class="btn btn-outline-primary" name="form_add_friend">Thêm bạn</button>
+                    </form>
+                <?php
+                } else { ?>
+                    <div class="btn btn-outline-primary disabled">Đã là bạn bè</div>
+                <?php
+                }
+            ?>
         </div>
         <?php
             $posts = getPostById($userCur['id']);
@@ -35,7 +51,7 @@
                         <div class="card-body row">
                             <div class="col-9">
                                 <a href="./wall.php?id=<?php echo $userCur['id'] ?>" class="card-title"><?php echo $userCur['displayname'] ?></a>
-                                <h6 class="card-sub_title"><?php echo $post['createAt'] ?></h6>
+                                <h6 class="card-sub_title"><?php echo $post['created_at'] ?></h6>
                                 <p class="card-text"><?php echo $post['content'] ?></p>
                             </div>
                             <div class="col-3 pull-items-right">

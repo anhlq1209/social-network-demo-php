@@ -21,7 +21,7 @@ if (isset($_SESSION['userId'])) {
             $result = move_uploaded_file($fileTemp, './assets/images/avatars/' . $fileName);
             if ($result)?>
                 <div class="alert alert-success mt-3" role="alert">
-                    Ảnh đại diện đã được cập nhật ;)
+                    Ảnh đại diện đã được cập nhật
                 </div>
             <?php
             $file = $fileName;
@@ -32,7 +32,7 @@ if (isset($_SESSION['userId'])) {
         $userCur = getUserById($_SESSION['userId']);
         ?>
         <div class="alert alert-success mt-3" role="alert">
-            Thông tin cá nhân đã được cập nhật ;)
+            Thông tin cá nhân đã được cập nhật
         </div>
     <?php
     }
