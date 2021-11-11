@@ -1,9 +1,9 @@
 <?php
-    require_once 'init.php';
+    require_once '../config/init.php';
     $page = 'Tường';
 ?>
 
-<?php include 'header.php' ?>
+<?php include '../layouts/header.php' ?>
 
 <?php if (isset($_SESSION['userId'])) {
     if (isset($_POST['form_add_friend'])) {
@@ -26,16 +26,18 @@
             <div class="avatar rounded-circle" style="background-image:url('./assets/images/avatars/<?php echo $userCur['avatar'] ?>')"></div>
             <h4 class="mt-3"><?php echo $userCur['displayname'] ?></h4>
             <?php
-                if (!checkFriend($_SESSION['userId'], $userCur['id'])) { ?>
-                    <form method="POST" action="add-friend.php">
-                        <input type="hidden" class="form-control" id="userCur" name="userCur" value="<?php echo $_SESSION['userId'] ?>">
-                        <input type="hidden" class="form-control" id="userFriend" name="userFriend" value="<?php echo $userCur['id'] ?>">
-                        <button type="submit" class="btn btn-outline-primary" name="form_add_friend">Thêm bạn</button>
-                    </form>
-                <?php
-                } else { ?>
-                    <div class="btn btn-outline-primary disabled">Đã là bạn bè</div>
-                <?php
+                if ($_SESSION['userId'] != $userCur['id']) {
+                    if (!checkFriend($_SESSION['userId'], $userCur['id'])) { ?>
+                        <form method="POST" action="add-friend.php">
+                            <input type="hidden" class="form-control" id="userCur" name="userCur" value="<?php echo $_SESSION['userId'] ?>">
+                            <input type="hidden" class="form-control" id="userFriend" name="userFriend" value="<?php echo $userCur['id'] ?>">
+                            <button type="submit" class="btn btn-outline-primary" name="form_add_friend">Thêm bạn</button>
+                        </form>
+                    <?php
+                    } else { ?>
+                        <div class="btn btn-outline-primary disabled">Đã là bạn bè</div>
+                    <?php
+                    }
                 }
             ?>
         </div>
@@ -70,4 +72,4 @@
     exit();
 } ?>
 
-<?php include 'footer.php' ?>
+<?php include '../layouts/footer.php' ?>

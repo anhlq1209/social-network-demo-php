@@ -1,9 +1,9 @@
 <?php
-    require_once 'init.php';
+    require_once 'config/init.php';
     $page = 'Đăng nhập';
 ?>
 
-<?php include 'header.php' ?>
+<?php include 'layouts/header.php' ?>
 
 <?php if (!isset($_SESSION['userId'])) {
         if (isset($_POST['form_login_click'])) {
@@ -35,4 +35,4 @@
     <h3>Bạn đã đăng nhập. Không thể tiếp tục hành động này!!!!</h3>
 <?php } ?>
 
-<?php include 'footer.php' ?>
+<?php include 'layouts/footer.php' ?>

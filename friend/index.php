@@ -1,15 +1,15 @@
 <?php
-    require_once 'init.php';
+    require_once '../config/init.php';
     $page = 'Trang chủ';
 ?>
 
-<?php include 'header.php' ?>
+<?php include '../layouts/header.php' ?>
 
 <?php if (isset($_SESSION['userId'])) {
     $userCur = getUserById($_SESSION['userId']); ?>
     <div class="content">
         <?php
-            $friends = getFriendsById();
+            $friends = getFriendsById($userCur['id']);
             if ($friends) {
         ?>
             <div class="posts">
@@ -38,4 +38,4 @@
     exit();
 } ?>
 
-<?php include 'footer.php' ?>
+<?php include '../layouts/footer.php' ?>

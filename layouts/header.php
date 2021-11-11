@@ -25,22 +25,22 @@
                         $user = getUserById($_SESSION['userId']);
                     ?>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Đăng trạng thái" ? "active" : "" ?>" href="./post.php">Đăng trạng thái</a>
+                            <a class="nav-link <?php echo $page == "Đăng trạng thái" ? "active" : "" ?>" href="./user/post.php">Đăng trạng thái</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Thông tin cá nhân" ? "active" : "" ?>" href="./profile.php">Profile</a>
+                            <a class="nav-link <?php echo $page == "Thông tin cá nhân" ? "active" : "" ?>" href="./user/profile.php">Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Tường" ? "active" : "" ?>" href="./wall.php">Wall</a>
+                            <a class="nav-link <?php echo $page == "Tường" ? "active" : "" ?>" href="./user/wall.php">Wall</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Bạn bè" ? "active" : "" ?>" href="./friends.php">Friends</a>
+                            <a class="nav-link <?php echo $page == "Bạn bè" ? "active" : "" ?>" href="./friend/index.php">Friends</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Đổi mật khẩu" ? "active" : "" ?>" href="./change-password.php">Đổi mật khẩu</a>
+                            <a class="nav-link <?php echo $page == "Đổi mật khẩu" ? "active" : "" ?>" href="./user/change-password.php">Đổi mật khẩu</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "" ? "active" : "" ?>" href="./logout.php">Đăng xuất</a>
+                            <a class="nav-link <?php echo $page == "" ? "active" : "" ?>" href="./user/logout.php">Đăng xuất</a>
                         </li>
                     <?php } else { ?>
                         <li class="nav-item">

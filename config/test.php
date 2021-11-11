@@ -1,5 +1,5 @@
 <?php
-require_once 'init.php';
+require_once '../config/init.php';
 
 try {
     global $db;

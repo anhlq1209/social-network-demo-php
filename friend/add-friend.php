@@ -1,4 +1,4 @@
-<?php require_once 'init.php'; ?>
+<?php require_once '../config/init.php'; ?>
 
 <?php
 if (isset($_POST['form_add_friend'])) {

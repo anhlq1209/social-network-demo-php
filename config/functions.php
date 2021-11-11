@@ -49,6 +49,25 @@ function getPostAll() {
     return $rows;
 }
 
+function getPostForUser($id) {
+    global $db;
+
+    $f_query = $db->prepare("SELECT * FROM friends WHERE user_id=?");
+    $f_query->execute(array($id));
+    $friends = $f_query->fetchAll(PDO::FETCH_ASSOC);
+    var_dump($friends);
+
+    $sql = "SELECT * FROM posts WHERE user_id=?";
+    foreach ($friends as $friend) {
+        $sql = $sql . " or " . $friend['friend_id'] . "=?"; 
+    }
+    $sql = $sql . " ORDER BY created_at DESC";
+    $p_query = $db->prepare($sql);
+    $p_query->execute();
+    $rows = $p_query->fetchAll(PDO::FETCH_ASSOC);
+    return $rows;
+}
+
 function getFriendsById($id) {
     global $db;
     $stmt = $db->prepare("SELECT * FROM friends WHERE user_id=?");

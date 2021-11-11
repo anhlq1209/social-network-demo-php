@@ -1,15 +1,16 @@
 <?php
-    require_once 'init.php';
+    require_once 'config/init.php';
     $page = 'Trang chủ';
 ?>
 
-<?php include 'header.php' ?>
+<?php include 'layouts/header.php' ?>
 
 <?php if (isset($_SESSION['userId'])) {
     $userCur = getUserById($_SESSION['userId']); ?>
     <h3 class="mt-2">Chào mừng <?php echo $userCur['displayname'] ?> đã đăng nhập!</h3>
     <div class="content">
         <?php
+            // $posts = getPostForUser($userCur['id']);
             $posts = getPostAll();
             if ($posts) {
         ?>
@@ -41,4 +42,4 @@
     exit();
 } ?>
 
-<?php include 'footer.php' ?>
+<?php include 'layouts/footer.php' ?>
