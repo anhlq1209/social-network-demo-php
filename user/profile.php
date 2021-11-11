@@ -8,7 +8,7 @@
 <?php
 if (isset($_SESSION['userId'])) {
     $userCur = getUserById($_SESSION['userId']);
-    if (isset($_POST['form_update_profile_click'])) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = $_POST['name'];
         $phone = $_POST['phone'];
         $file = $userCur['avatar'];
@@ -17,8 +17,8 @@ if (isset($_SESSION['userId'])) {
             $fileName = $_FILES['avatar']['name'];
             $fileName = $userCur['id'].substr($fileName, strpos($fileName, '.', strlen($fileName) - 5), strlen($fileName));
             $fileTemp = $_FILES['avatar']['tmp_name'];
-            unlink("./assets/images/avatars/".$userCur['avatar']);
-            $result = move_uploaded_file($fileTemp, './assets/images/avatars/' . $fileName);
+            unlink("/assets/images/avatars/".$userCur['avatar']);
+            $result = move_uploaded_file($fileTemp, '/assets/images/avatars/' . $fileName);
             if ($result)?>
                 <div class="alert alert-success mt-3" role="alert">
                     Ảnh đại diện đã được cập nhật
@@ -37,7 +37,7 @@ if (isset($_SESSION['userId'])) {
     <?php
     }
     ?>
-    <div class="avatar rounded-circle mx-auto my-3" style="background-image:url('./assets/images/avatars/<?php echo $userCur['avatar'] ?>')"></div>
+    <div class="avatar rounded-circle mx-auto my-3" style="background-image:url('/assets/images/avatars/<?php echo $userCur['avatar'] ?>')"></div>
     <form method="POST" enctype="multipart/form-data">
         <div class="mb-3">
             <input class="form-control" type="file" name="avatar">

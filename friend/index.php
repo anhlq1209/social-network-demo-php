@@ -1,9 +1,9 @@
 <?php
-    require_once '../config/init.php';
-    $page = 'Trang chủ';
+    require_once 'config/init.php';
+    $page = 'Danh sách bạn bè';
 ?>
 
-<?php include '../layouts/header.php' ?>
+<?php include 'layouts/header.php' ?>
 
 <?php if (isset($_SESSION['userId'])) {
     $userCur = getUserById($_SESSION['userId']); ?>
@@ -34,8 +34,8 @@
         <?php } ?>
     </div>
 <?php } else {
-    header('Location: ./login.php');
+    header('Location: login.php');
     exit();
 } ?>
 
-<?php include '../layouts/footer.php' ?>
+<?php include 'layouts/footer.php' ?>

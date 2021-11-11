@@ -1,5 +1,11 @@
 <?php
 
+function showAlertDanger($content) { ?>
+    <div class="alert alert-danger mt-3" role="alert">
+        <?php echo $content ?>
+    </div>
+<?php }
+
 function getUserByEmail($email) {
     global $db;
     $stmt = $db->prepare("SELECT * FROM users WHERE email=?");
@@ -76,11 +82,11 @@ function getFriendsById($id) {
     return $rows;
 }
 
-function addFriend($id, $friend) {
+function insertFriend($user_id, $friend_id) {
     global $db;
     $sql = "INSERT INTO friends(user_id, friend_id) VALUES(?, ?)";
     $stmt= $db->prepare($sql);
-    $stmt->execute([$id, $friend]);
+    $stmt->execute([$user_id, $friend_id]);
 }
 
 function checkFriend($user_id, $friend_id) {
@@ -91,4 +97,34 @@ function checkFriend($user_id, $friend_id) {
     if ($row)
         return true;
     return false;
+}
+
+function checkRequestFriend($user_id, $friend_id) {
+    global $db;
+    $stmt = $db->prepare("SELECT * FROM friend_requests WHERE user_id=? and friend_id=?");
+    $stmt->execute(array($user_id, $friend_id));
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row)
+        return true;
+    return false;
+}
+
+function insertFriendRequest($user_id, $friend_id) {
+    global $db;
+    $query = $db->prepare("INSERT INTO friend_requests(user_id, friend_id) VALUES(?, ?)");
+    $query->execute(array($user_id, $friend_id));
+}
+
+function deleteFriendRequest($user_id, $friend_id) {
+    global $db;
+    $query = $db->prepare("DELETE FROM friend_requests WHERE user_id=? and friend_id=?");
+    $query->execute(array($user_id, $friend_id));
+}
+
+function getFriendRequest($id) {
+    global $db;
+    $query = $db->prepare("SELECT * FROM friend_requests WHERE friend_id=?");
+    $query->execute(array($id));
+    $rows = $query->fetchAll(PDO::FETCH_ASSOC);
+    return $rows;
 }

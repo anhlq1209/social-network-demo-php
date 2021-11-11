@@ -7,7 +7,7 @@
 
 <?php if (isset($_SESSION['userId'])) {
         $userCur = getUserById($_SESSION['userId']);
-        if (isset($_POST['form_post_click'])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $content = $_POST['content_post'];
             
             if ($content == '') { ?>
@@ -27,7 +27,7 @@
     ?>
     <form method="POST">
         <div class="mb-3">
-            <div class="avatar avatar--super-small rounded-circle dp--inline-block" style="background-image:url('./assets/images/avatars/<?php echo $userCur['avatar'] ?>')"></div>
+            <div class="avatar avatar--super-small rounded-circle dp--inline-block" style="background-image:url('../assets/images/avatars/<?php echo $userCur['avatar'] ?>')"></div>
             <label for="content_post" class="form-label">Bạn đang nghĩ gì?</label>
             <textarea class="form-control" id="content_post" name="content_post" rows="4"></textarea>
             </div>

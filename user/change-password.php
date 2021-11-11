@@ -7,7 +7,7 @@
 
 <?php if (isset($_SESSION['userId'])) { ?>
     <?php
-        if (isset($_POST['form_change_password_click'])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pass = $_POST['password-old'];
             $newpass = $_POST['password-new'];
             $c_newpass = $_POST['password-new-confirm'];

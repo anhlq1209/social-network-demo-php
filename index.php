@@ -22,12 +22,12 @@
                     <div class="card mt-3">
                         <div class="card-body row">
                             <div class="col-9">
-                                <a href="./wall.php?id=<?php echo $p_user['id'] ?>" class="card-title"><?php echo $p_user['displayname'] ?></a>
+                                <a href="/user/wall.php?id=<?php echo $p_user['id'] ?>" class="card-title"><?php echo $p_user['displayname'] ?></a>
                                 <h6 class="card-sub_title"><?php echo $post['created_at'] ?></h6>
                                 <p class="card-text"><?php echo $post['content'] ?></p>
                             </div>
                             <div class="col-3 pull-items-right">
-                                <a href="./wall?id=<?php echo $p_user['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('./assets/images/avatars/<?php echo $p_user['avatar'] ?>')"></a>
+                                <a href="/user/wall?id=<?php echo $p_user['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('/assets/images/avatars/<?php echo $p_user['avatar'] ?>')"></a>
                             </div>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
         <?php } ?>
     </div>
 <?php } else {
-    header('Location: ./login.php');
+    header('Location: login.php');
     exit();
 } ?>
 

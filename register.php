@@ -7,7 +7,7 @@
 
 <?php if (!isset($_SESSION['userId'])) { ?>
     <?php
-        if (isset($_POST['form_register_click'])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $name = $_POST['name'];
             $mail = $_POST['email'];
             $phone = $_POST['phone'];

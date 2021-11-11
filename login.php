@@ -6,13 +6,13 @@
 <?php include 'layouts/header.php' ?>
 
 <?php if (!isset($_SESSION['userId'])) {
-        if (isset($_POST['form_login_click'])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail = $_POST['email'];
             $pass = $_POST['password'];
             $user = getUserByEmail($mail);
             if ($user && password_verify($pass, $user['password'])) {
                 $_SESSION['userId'] = $user['id'];
-                header('Location: ./index.php');
+                header('Location: /index.php');
                 exit();
             } else { ?>
             <div class="alert alert-danger mt-3" role="alert">
