@@ -23,28 +23,40 @@
                     <a class="nav-link <?php echo $page == "Trang chủ" ? "active" : "" ?>" aria-current="page" href="/index.php">Trang chủ</a>
                     </li>
                     <?php if (isset($_SESSION['userId'])) {
-                        $user = getUserById($_SESSION['userId']);
+                        $userCur = getUserById($_SESSION['userId']);
                     ?>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Đăng trạng thái" ? "active" : "" ?>" href="/user/post.php">Đăng trạng thái</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?php echo $userCur['displayname'] ?></a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li class="dropdown-item">
+                                    <a class="nav-link <?php echo $page == "Thông tin cá nhân" ? "active" : "" ?>" href="/user/profile.php">Thông tin cá nhân</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="nav-link <?php echo $page == "Đăng trạng thái" ? "active" : "" ?>" href="/user/post.php">Đăng trạng thái</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="nav-link <?php echo $page == "Tường" ? "active" : "" ?>" href="/user/wall.php">Tường</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="nav-link <?php echo $page == "Đổi mật khẩu" ? "active" : "" ?>" href="/user/change-password.php">Đổi mật khẩu</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="nav-link <?php echo $page == "" ? "active" : "" ?>" href="/logout.php">Đăng xuất</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Thông tin cá nhân" ? "active" : "" ?>" href="/user/profile.php">Thông tin cá nhân</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Tường" ? "active" : "" ?>" href="/user/wall.php">Tường</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Danh sách bạn bè" ? "active" : "" ?>" href="/friend/index.php">Danh sách bạn bè</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Lời mời kết bạn" ? "active" : "" ?>" href="/friend/friend-req.php">Lời mời kết bạn</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "Đổi mật khẩu" ? "active" : "" ?>" href="/user/change-password.php">Đổi mật khẩu</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo $page == "" ? "active" : "" ?>" href="/logout.php">Đăng xuất</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Bạn bè
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li class="dropdown-item">
+                                    <a class="nav-link <?php echo $page == "Danh sách bạn bè" ? "active" : "" ?>" href="/friend/index.php">Danh sách bạn bè</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="nav-link <?php echo $page == "Lời mời kết bạn" ? "active" : "" ?>" href="/friend/friend-req.php">Lời mời kết bạn</a>
+                                </li>
+                            </ul>
                         </li>
                     <?php } else { ?>
                         <li class="nav-item">
@@ -52,6 +64,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?php echo $page == "Đăng nhập" ? "active" : "" ?>" href="/login.php">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo $page == "Quên mật khẩu" ? "active" : "" ?>" href="/forgot-password.php">Quên mật khẩu</a>
                         </li>
                     <?php } ?>
                 </ul>

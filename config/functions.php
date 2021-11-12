@@ -1,7 +1,25 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
+
 function showAlertDanger($content) { ?>
     <div class="alert alert-danger mt-3" role="alert">
+        <?php echo $content ?>
+    </div>
+<?php }
+
+function showAlertWarning($content) { ?>
+    <div class="alert alert-warning mt-3" role="alert">
+        <?php echo $content ?>
+    </div>
+<?php }
+
+function showAlertSuccess($content) { ?>
+    <div class="alert alert-success mt-3" role="alert">
         <?php echo $content ?>
     </div>
 <?php }
@@ -84,9 +102,16 @@ function getFriendsById($id) {
 
 function insertFriend($user_id, $friend_id) {
     global $db;
-    $sql = "INSERT INTO friends(user_id, friend_id) VALUES(?, ?)";
+    $sql = "call sp_InsertFriend(". $user_id . ", " . $friend_id . ")";
     $stmt= $db->prepare($sql);
-    $stmt->execute([$user_id, $friend_id]);
+    $stmt->execute();
+}
+
+function deleteFriend($user_id, $friend_id) {
+    global $db;
+    $sql = "call sp_DeleteFriend(". $user_id . ", " . $friend_id . ")";
+    $stmt= $db->prepare($sql);
+    $stmt->execute();
 }
 
 function checkFriend($user_id, $friend_id) {
@@ -117,8 +142,8 @@ function insertFriendRequest($user_id, $friend_id) {
 
 function deleteFriendRequest($user_id, $friend_id) {
     global $db;
-    $query = $db->prepare("DELETE FROM friend_requests WHERE user_id=? and friend_id=?");
-    $query->execute(array($user_id, $friend_id));
+    $query = $db->prepare("DELETE FROM friend_requests WHERE (user_id=? and friend_id=?) or (user_id=? and friend_id=?)");
+    $query->execute(array($user_id, $friend_id, $friend_id, $user_id));
 }
 
 function getFriendRequest($id) {
@@ -127,4 +152,65 @@ function getFriendRequest($id) {
     $query->execute(array($id));
     $rows = $query->fetchAll(PDO::FETCH_ASSOC);
     return $rows;
+}
+
+function insertUser($name, $mail, $phone, $pass) {
+    $hashPassword = password_hash($pass, PASSWORD_DEFAULT);
+    $sql = "INSERT INTO users(displayname, email, password, phone) VALUES(?, ?, ?, ?)";
+    $stmt= $db->prepare($sql);
+    $stmt->execute([$name, $mail, $hashPassword, $phone]);
+}
+
+function updateCode($code, $email) {
+    global $db;
+    $query = $db->prepare("UPDATE users SET code=? WHERE email=?");
+    $query->execute(array($code, $email));
+}
+
+function sendForgotPasswordEmail($email) {
+    $code = uniqid();
+    updateCode($code, $email);
+
+    $mail = new PHPMailer(true);
+
+    // $mail->SMTPDebug  = 1;
+    $mail->CharSet = PHPMailer::CHARSET_UTF8;
+    $mail->isSMTP();   
+    $mail->SMTPAuth   = true;
+    $mail->SMTPSecure = "tls";
+    $mail->Port       = 587;
+    $mail->Host       = "smtp.gmail.com";
+    $mail->Username   = "noirlee.1208@gmail.com";
+    $mail->Password   = "Noirlee1208@";
+
+    $mail->setFrom('noirlee.1208@gmail.com', 'Noir Lee');
+    $mail->addAddress($email);
+
+    $mail->isHTML(true);
+    $mail->Subject = 'Quên mật khẩu trang web Noir Lee';
+    $mail->Body    = 'Mời bạn ấn vào địa chỉ dưới đây để khôi phục mật khẩu:<br/>http://noirlee/change-password.php?code=' . $code;
+    $mail->AltBody = 'Email quên mật khẩu trang web Noir Lee';
+
+    $mail->send();
+}
+
+function checkCode($code) {
+    global $db;
+    $query = $db->prepare("SELECT * FROM users WHERE code=?");
+    $query->execute(array($code));
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+    if ($row)
+        return true;
+    return false;
+}
+
+function updatePasswordByCode($code, $pass) {
+    global $db;
+    $hashPassword = password_hash($pass, PASSWORD_DEFAULT);
+
+    $query1 = $db->prepare("UPDATE users SET password=? WHERE code=?");
+    $query1->execute(array($hashPassword, $code));
+
+    $query2 = $db->prepare("UPDATE users SET code=? WHERE code=?");
+    $query2->execute(array(null, $code));
 }

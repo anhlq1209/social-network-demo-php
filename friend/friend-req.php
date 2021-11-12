@@ -19,7 +19,7 @@
 
                 ?>
                     <div class="card mt-3">
-                        <div class="card-body my-row">
+                        <div class="card-body my-row space-between">
                             <div class="align-center">
                                 <a class="card-avatar card-avatar--small me-2" href="/user/wall.php?id=<?php echo $fr_user['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('/assets/images/avatars/<?php echo $fr_user['avatar'] ?>')"></a>
                                 <a class="card-name" href="/user/wall.php?id=<?php echo $fr_user['id'] ?>" class="card-title"><?php echo $fr_user['displayname'] ?></a>

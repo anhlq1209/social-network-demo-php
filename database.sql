@@ -1,16 +1,16 @@
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `displayname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gender` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `displayname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'avatar-default.png',
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,
-  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
-UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `friends`(
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -78,55 +78,146 @@ CREATE TABLE `comments`(
 
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+create PROCEDURE sp_InsertFriend
+(in userId bigint, in friendId bigint)
+BEGIN
+	IF (userId != friendId) THEN
+		IF (NOT EXISTS (SELECT * FROM friends WHERE friends.user_id=userId and friends.friend_id=friendId)) THEN
+			INSERT INTO friends (user_id, friend_id) VALUES (userId, friendId);
+		END IF;
+		IF (NOT EXISTS (SELECT * FROM friends WHERE friends.user_id=friendId and friends.friend_id=userId)) THEN
+			INSERT INTO friends (user_id, friend_id) VALUES (friendId, userId);
+		END IF;
+	END if;
+end;
+
+call sp_InsertFriend(1, 2);
+call sp_DeleteFriend(1, 2);
+
+create PROCEDURE sp_DeleteFriend
+(in userId bigint, in friendId bigint)
+BEGIN
+	IF (userId != friendId) THEN
+		IF (EXISTS (SELECT * FROM friends WHERE friends.user_id=userId and friends.friend_id=friendId)) THEN
+			DELETE FROM friends 
+				    where friends.user_id=userId
+				      and friends.friend_id=friendId;
+		END IF;
+		IF (EXISTS (SELECT * FROM friends WHERE friends.user_id=friendId and friends.friend_id=userId)) THEN
+			DELETE FROM friends 
+				    where friends.user_id=friendId
+				      and friends.friend_id=userId;
+		END IF;
+	END IF;
+end;
+
 create TRIGGER tg_InsertLike
 after insert on likes
 for each row
-	update posts
-    set posts.count_likes = (select count(*) from likes where new.post_id=likes.post_id)
-    where posts.id=new.post_id;
+BEGIN
+	SET @post_id = new.post_id;
+	
+	IF EXISTS(select * FROM posts WHERE posts.id=@post_id) THEN
+		update posts
+	    set posts.count_likes = (select count(*) from likes where likes.post_id=@post_id)
+	    where posts.id=@post_id;
+	END IF;
+END;
 
 create TRIGGER tg_DeleteLike
 after delete on likes
 for each row
-	update posts
-    set posts.count_likes = (select count(*) from likes where old.post_id=likes.post_id)
-    where posts.id=old.post_id;
-    
+BEGIN
+	SET @post_id = old.post_id;
+	
+	IF EXISTS(select * FROM posts WHERE posts.id=@post_id) THEN
+		update posts
+	    set posts.count_likes = (select count(*) from likes where likes.post_id=@post_id)
+	    where posts.id=@post_id;
+	END IF;
+END;
+
+create TRIGGER tg_UpdateLike
+after update on likes
+for each row
+BEGIN
+	SET @post_id_new = new.post_id;
+	SET @post_id_old = old.post_id;
+	
+	IF EXISTS(select * FROM posts WHERE posts.id=@post_id_new) THEN
+		update posts
+	    set posts.count_likes = (select count(*) from likes where likes.post_id=@post_id_new)
+	    where posts.id=@post_id_new;
+	END IF;
+	
+	IF EXISTS(select * FROM posts WHERE posts.id=@post_id_old) THEN
+		update posts
+	    set posts.count_likes = (select count(*) from likes where likes.post_id=@post_id_old)
+	    where posts.id=@post_id_old;
+	END IF;
+END;
+
 create TRIGGER tg_InsertComment
 after insert on comments
 for each row
-	update posts
-    set posts.count_comments = (select count(*) from comments where new.post_id=comments.post_id)
-    where posts.id=new.post_id;
-    
+BEGIN
+	SET @post_id = new.post_id;
+	
+	IF EXISTS(select * FROM posts WHERE posts.id=@post_id) THEN
+		update posts
+	    set posts.count_comments = (select count(*) from comments where comments.post_id=@post_id)
+	    where posts.id=@post_id;
+	END IF;
+END;
+
 create TRIGGER tg_DeleteComment
 after delete on comments
 for each row
-	update posts
-    set posts.count_comments = (select count(*) from comments where old.post_id=comments.post_id)
-    where posts.id=old.post_id;
+BEGIN
+	SET @post_id = old.post_id;
+	
+	IF EXISTS(select * FROM posts WHERE posts.id=@post_id) THEN
+		update posts
+	    set posts.count_comments = (select count(*) from comments where comments.post_id=@post_id)
+	    where posts.id=@post_id;
+	END IF;
+END;
 
-create TRIGGER tg_InsertFriend
-after insert on friends
+create TRIGGER tg_UpdateComment
+after update on comments
 for each row
-	insert into friends (user_id, friend_id)
-		VALUES (NEW.friend_id, NEW.user_id);
-		
-create TRIGGER tg_DeleteFriend
-after DELETE on friends
-for each row
-	DELETE FROM friends 
-    where friends.user_id=OLD.friend_id
-      and friends.friend_id=OLD.user_id
+BEGIN
+	SET @post_id_new = new.post_id;
+	SET @post_id_old = old.post_id;
+	
+	IF EXISTS(select * FROM posts WHERE posts.id=@post_id_new) THEN
+		update posts
+	    set posts.count_comments = (select count(*) from comments where comments.post_id=@post_id_new)
+	    where posts.id=@post_id_new;
+	END IF;
+	
+	IF EXISTS(select * FROM posts WHERE posts.id=@post_id_old) THEN
+		update posts
+	    set posts.count_comments = (select count(*) from comments where comments.post_id=@post_id_old)
+	    where posts.id=@post_id_old;
+	END IF;
+END;
 
 create TRIGGER tg_DeletePost
 after DELETE on posts
 for each row
 BEGIN
-	DELETE FROM likes 
-    where likes.post_id=OLD.id;
-    delete from comments
-    where comments.post_id=OLD.id;
+	set @id = OLD.id;
+	
+	IF EXISTS (select * from likes where likes.post_id=@id) THEN
+		DELETE FROM likes 
+		where likes.post_id=@id;
+	END IF;
+	
+	IF EXISTS (select * from comments where comments.post_id=@id) THEN
+	    delete from comments
+	    where comments.post_id=@id;
+	END IF;
 END;
 
 INSERT INTO `users` (`id`, `displayname`, `email`, `password`, `gender`, `phone`, `avatar`, `created_at`, `updated_at`) VALUES

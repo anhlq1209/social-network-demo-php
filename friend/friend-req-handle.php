@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST['handle_name'] == "unfriend") {
         $user_id = $_POST['user_id'];
         $friend_id = $_POST['friend_id'];
-        deleteFriendRequest($user_id, $friend_id);
+        deleteFriend($user_id, $friend_id);
         header('Location: /user/wall.php?id=' . $friend_id);
         exit();
     } else
@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user_id = $_POST['user_id'];
         $friend_id = $_POST['friend_id'];
         insertFriend($user_id, $friend_id);
-        deleteFriendRequest($friend_id, $user_id);
+        deleteFriendRequest($user_id, $friend_id);
         header('Location: /friend/friend-req.php');
         exit();
     } else
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST['handle_name'] == "decline_friend_request") {
         $user_id = $_POST['user_id'];
         $friend_id = $_POST['friend_id'];
-        deleteFriendRequest($friend_id, $user_id);
+        deleteFriendRequest($user_id, $friend_id);
         header('Location: /friend/friend-req.php');
         exit();
     }

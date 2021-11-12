@@ -29,10 +29,7 @@
                 </div>
             <?php            
             } else {
-                $hashPassword = password_hash($pass, PASSWORD_DEFAULT);
-                $sql = "INSERT INTO users(displayname, email, password, phone) VALUES(?, ?, ?, ?)";
-                $stmt= $db->prepare($sql);
-                $stmt->execute([$name, $mail, $hashPassword, $phone]); ?>
+                insertUser($name, $mail, $phone, $pass) ?>
                 <div class="alert alert-success mt-3" role="alert">
                     Đăng ký tài khoản thành công ;)
                 </div>

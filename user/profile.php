@@ -11,6 +11,7 @@ if (isset($_SESSION['userId'])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = $_POST['name'];
         $phone = $_POST['phone'];
+        $email = $_POST['email'];
         $file = $userCur['avatar'];
 
         if ($_FILES['avatar']['name'] != "") {
@@ -27,8 +28,8 @@ if (isset($_SESSION['userId'])) {
             $file = $fileName;
         }
 
-        $stmt= $db->prepare("UPDATE users SET displayname=?, phone=?, avatar=? WHERE id=?");
-        $stmt->execute(array($name, $phone, $file, $_SESSION['userId']));
+        $stmt= $db->prepare("UPDATE users SET displayname=?, email=?, phone=?, avatar=? WHERE id=?");
+        $stmt->execute(array($name, $email, $phone, $file, $_SESSION['userId']));
         $userCur = getUserById($_SESSION['userId']);
         ?>
         <div class="alert alert-success mt-3" role="alert">
