@@ -41,7 +41,6 @@ CREATE TABLE `posts`(
     `id` bigint unsigned NOT NULL AUTO_INCREMENT,
     `user_id` bigint unsigned NOT NULL,
     `content` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
     `count_likes` bigint unsigned default 0,
     `count_comments` bigint unsigned default 0,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,
@@ -78,6 +77,18 @@ CREATE TABLE `comments`(
 
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `images_post`(
+    `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+    `post_id` bigint unsigned NOT NULL,
+    `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP ,
+  	`updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    UNIQUE KEY `id`(`id`),
+    CONSTRAINT `FK_Images_Posts` FOREIGN KEY (`post_id`) REFERENCES `posts`(`id`)
+
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 create PROCEDURE sp_InsertFriend
 (in userId bigint, in friendId bigint)
 BEGIN
@@ -90,9 +101,6 @@ BEGIN
 		END IF;
 	END if;
 end;
-
-call sp_InsertFriend(1, 2);
-call sp_DeleteFriend(1, 2);
 
 create PROCEDURE sp_DeleteFriend
 (in userId bigint, in friendId bigint)
@@ -217,6 +225,11 @@ BEGIN
 	IF EXISTS (select * from comments where comments.post_id=@id) THEN
 	    delete from comments
 	    where comments.post_id=@id;
+	END IF;
+	
+	IF EXISTS (select * from images_post where images_post.post_id=@id) THEN
+	    delete from images_post
+	    where images_post.post_id=@id;
 	END IF;
 END;
 

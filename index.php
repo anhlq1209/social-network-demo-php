@@ -29,6 +29,28 @@
                             <div class="col-3 pull-items-right">
                                 <a href="/user/wall?id=<?php echo $p_user['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('/assets/images/avatars/<?php echo $p_user['avatar'] ?>')"></a>
                             </div>
+                            <?php
+                                if (getImagesByPost($post['id'])){
+                                    $images = getImagesByPost($post['id']);
+                                    foreach ($images as $image) { ?>
+                                    <div class="col-12 justify-center">
+                                        <img src="./assets/images/images-post/<?php echo $image['image']; ?>" alt="" style="max-width: 100%; width: auto; max-height: 500px; height: auto;">
+                                    </div>
+                                    <?php
+                                    }
+                                } ?>
+                            <hr>
+                            <div class="col-12 row">
+                                <div class="col-4 justify-align-center">
+                                    <i class="far fa-thumbs-up font-size-25"></i>
+                                </div>
+                                <div class="col-4 justify-align-center">
+                                    <i class="far fa-comment"></i>
+                                </div>
+                                <div class="col-4 justify-align-center">
+                                    <i class="far fa-share-square"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <?php } ?>

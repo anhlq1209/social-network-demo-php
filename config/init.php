@@ -1,5 +1,7 @@
 <?php
-require_once 'functions.php';
+$r = $_SERVER['DOCUMENT_ROOT'];
+
+require_once $r.'/config/functions.php';
 
 session_start();
 

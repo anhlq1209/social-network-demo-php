@@ -4,7 +4,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php';
+$r = $_SERVER['DOCUMENT_ROOT'];
+
+require $r.'/vendor/autoload.php';
 
 function showAlertDanger($content) { ?>
     <div class="alert alert-danger mt-3" role="alert">
@@ -213,4 +215,12 @@ function updatePasswordByCode($code, $pass) {
 
     $query2 = $db->prepare("UPDATE users SET code=? WHERE code=?");
     $query2->execute(array(null, $code));
+}
+
+function getImagesByPost($id) {
+    global $db;
+    $query = $db->prepare("SELECT * FROM images_post WHERE post_id=?");
+    $query->execute(array($id));
+    $rows = $query->fetchAll(PDO::FETCH_ASSOC);
+    return $rows;
 }
