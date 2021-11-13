@@ -7,10 +7,9 @@
 
 <?php if (isset($_SESSION['userId'])) {
     $userCur = getUserById($_SESSION['userId']); ?>
-    <h3 class="mt-2">Chào mừng <?php echo $userCur['displayname'] ?> đã đăng nhập!</h3>
+    <h3 id="h333" class="mt-2">Chào mừng <?php echo $userCur['displayname'] ?> đã đăng nhập!</h3>
     <div class="content">
         <?php
-            // $posts = getPostForUser($userCur['id']);
             $posts = getPostAll();
             if ($posts) {
         ?>
@@ -18,8 +17,9 @@
                 <?php
                     foreach ($posts as $post) {
                         $p_user = getUserById($post['user_id']);
+                        $liked = isUserLikePost($userCur['id'], $post['id']);
                 ?>
-                    <div class="card mt-3">
+                    <div id="<?php echo $post['id'] ?>" class="card mt-3">
                         <div class="card-body row">
                             <div class="col-9">
                                 <a href="/user/wall.php?id=<?php echo $p_user['id'] ?>" class="card-title"><?php echo $p_user['displayname'] ?></a>
@@ -33,22 +33,40 @@
                                 if (getImagesByPost($post['id'])){
                                     $images = getImagesByPost($post['id']);
                                     foreach ($images as $image) { ?>
-                                    <div class="col-12 justify-center">
+                                    <div class="col-12 justify-center bg-post-image my-1">
                                         <img src="./assets/images/images-post/<?php echo $image['image']; ?>" alt="" style="max-width: 100%; width: auto; max-height: 500px; height: auto;">
                                     </div>
                                     <?php
                                     }
                                 } ?>
+                            <div class="col-12 row">
+                                <div class="col-6 pull-items-left">
+                                    <span class="likes"><?php echo $post['count_likes'] ?></span>
+                                </div>
+                                <div class="col-6  pull-items-right">
+                                    <span class="comments"><?php echo $post['count_comments'] ?> Bình luận</span>
+                                </div>
+                            </div>
                             <hr>
                             <div class="col-12 row">
                                 <div class="col-4 justify-align-center">
-                                    <i class="far fa-thumbs-up font-size-25"></i>
+                                    <form action="/handle-post-actions.php" method="post">
+                                        <input type="hidden" name="action" value="<?php echo $liked ? "unlike" : "like" ?>">
+                                        <input type="hidden" name="post_id" value="<?php echo $post['id'] ?>">
+                                        <input type="hidden" name="user_id" value="<?php echo $userCur['id'] ?>">
+                                        <input type="hidden" name="page" value="index">
+                                        <button type="submit" class="btn-none">
+                                            <i class="<?php echo $liked ? "fas" : "far" ?> fa-thumbs-up font-size-25 post-icon"></i>
+                                        </button>
+                                    </form>
                                 </div>
                                 <div class="col-4 justify-align-center">
-                                    <i class="far fa-comment"></i>
+                                    <a href="/user/post.php?post=<?php echo $post['id'] ?>" class="a-none">
+                                        <i class="far fa-comment font-size-25 post-icon"></i>
+                                    </a>
                                 </div>
                                 <div class="col-4 justify-align-center">
-                                    <i class="far fa-share-square"></i>
+                                    <i class="far fa-share-square font-size-25 post-icon"></i>
                                 </div>
                             </div>
                         </div>
@@ -63,5 +81,13 @@
     header('Location: login.php');
     exit();
 } ?>
+
+<script>
+    const likes = document.getElementsByClassName('likes');
+    const likesQuery = document.querySelector('.likes');
+    console.log('1: ',likes, '2: ', likesQuery);
+    var cookie = document.cookie.split('; ');
+    console.log(cookie);
+</script>
 
 <?php include 'layouts/footer.php' ?>

@@ -61,6 +61,14 @@ function checkPassword($pass) {
 
 function getPostById($id) {
     global $db;
+    $stmt = $db->prepare("SELECT * FROM posts WHERE id=?");
+    $stmt->execute(array($id));
+    $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $rows;
+}
+
+function getPostByUserId($id) {
+    global $db;
     $stmt = $db->prepare("SELECT * FROM posts WHERE user_id=? ORDER BY created_at DESC");
     $stmt->execute(array($id));
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -72,25 +80,6 @@ function getPostAll() {
     $stmt = $db->prepare("SELECT * FROM posts ORDER BY created_at DESC");
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $rows;
-}
-
-function getPostForUser($id) {
-    global $db;
-
-    $f_query = $db->prepare("SELECT * FROM friends WHERE user_id=?");
-    $f_query->execute(array($id));
-    $friends = $f_query->fetchAll(PDO::FETCH_ASSOC);
-    var_dump($friends);
-
-    $sql = "SELECT * FROM posts WHERE user_id=?";
-    foreach ($friends as $friend) {
-        $sql = $sql . " or " . $friend['friend_id'] . "=?"; 
-    }
-    $sql = $sql . " ORDER BY created_at DESC";
-    $p_query = $db->prepare($sql);
-    $p_query->execute();
-    $rows = $p_query->fetchAll(PDO::FETCH_ASSOC);
     return $rows;
 }
 
@@ -220,6 +209,42 @@ function updatePasswordByCode($code, $pass) {
 function getImagesByPost($id) {
     global $db;
     $query = $db->prepare("SELECT * FROM images_post WHERE post_id=?");
+    $query->execute(array($id));
+    $rows = $query->fetchAll(PDO::FETCH_ASSOC);
+    return $rows;
+}
+
+function isUserLikePost($user_id, $post_id) {
+    global $db;
+    $query = $db->prepare("SELECT * FROM likes WHERE user_id=? and post_id=?");
+    $query->execute(array($user_id, $post_id));
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+    if ($row)
+        return true;
+    return false;
+}
+
+function insertLike($user_id, $post_id) {
+    global $db;
+    $stmt= $db->prepare("INSERT INTO likes(user_id, post_id) VALUES(?, ?)");
+    $stmt->execute(array($user_id, $post_id));
+}
+
+function deleteLike($user_id, $post_id) {
+    global $db;
+    $stmt= $db->prepare("DELETE FROM likes WHERE user_id=? and post_id=?");
+    $stmt->execute(array($user_id, $post_id));
+}
+
+function insertComment($user_id, $post_id, $content) {
+    global $db;
+    $stmt= $db->prepare("INSERT INTO comments(user_id, post_id, content) VALUES(?, ?, ?)");
+    $stmt->execute(array($user_id, $post_id, $content));
+}
+
+function getCommentByPost($id) {
+    global $db;
+    $query = $db->prepare("SELECT * FROM comments WHERE id=?");
     $query->execute(array($id));
     $rows = $query->fetchAll(PDO::FETCH_ASSOC);
     return $rows;

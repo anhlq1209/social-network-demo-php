@@ -23,7 +23,7 @@
                                 <a class="card-avatar card-avatar--small me-2" href="/user/wall.php?id=<?php echo $f_user['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('/assets/images/avatars/<?php echo $f_user['avatar'] ?>')"></a>
                                 <a class="card-name" href="/user/wall.php?id=<?php echo $f_user['id'] ?>" class="card-title"><?php echo $f_user['displayname'] ?></a>
                             </div>
-                            <div class="pull-right my-col">
+                            <div class="pull-right my-col justify-align-center">
                                 <form class="align-center" method="POST" action="/friend/friend-req-handle.php">
                                     <input type="hidden" name="handle_name" value="unfriend">
                                     <input type="hidden" name="user_id" value="<?php echo $userCur['id'] ?>">

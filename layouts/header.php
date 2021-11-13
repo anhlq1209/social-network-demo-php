@@ -7,7 +7,8 @@
     <title>Noir Lee<?php echo $page == 'Trang chủ' ? '' : ' - '.$page ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/my-style.css">
+    <!-- <link rel="stylesheet" href="../assets/css/my-style.css"> -->
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <body>
     <div class="container">
@@ -32,7 +33,7 @@
                                     <a class="nav-link <?php echo $page == "Thông tin cá nhân" ? "active" : "" ?>" href="/user/profile.php">Thông tin cá nhân</a>
                                 </li>
                                 <li class="dropdown-item">
-                                    <a class="nav-link <?php echo $page == "Đăng trạng thái" ? "active" : "" ?>" href="/user/post.php">Đăng trạng thái</a>
+                                    <a class="nav-link <?php echo $page == "Đăng trạng thái" ? "active" : "" ?>" href="/user/up-post.php">Đăng trạng thái</a>
                                 </li>
                                 <li class="dropdown-item">
                                     <a class="nav-link <?php echo $page == "Tường" ? "active" : "" ?>" href="/user/wall.php">Tường</a>

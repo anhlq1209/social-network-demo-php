@@ -60,7 +60,7 @@
             ?>
         </div>
         <?php
-            $posts = getPostById($userCur['id']);
+            $posts = getPostByUserId($userCur['id']);
             if ($posts) {
         ?>
             <div class="posts">
