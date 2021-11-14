@@ -25,7 +25,7 @@ if (isset($_SESSION['userId'])) {
                         <p class="card-text"><?php echo $post['content'] ?></p>
                     </div>
                     <div class="col-3 pull-items-right">
-                        <a href="/user/wall?id=<?php echo $p_user['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('/assets/images/avatars/<?php echo $p_user['avatar'] ?>')"></a>
+                        <a href="/user/wall.php?id=<?php echo $p_user['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('/assets/images/avatars/<?php echo $p_user['avatar'] ?>')"></a>
                     </div>
                     <?php
                         if (getImagesByPost($post['id'])){

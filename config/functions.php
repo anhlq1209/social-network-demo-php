@@ -125,6 +125,16 @@ function checkRequestFriend($user_id, $friend_id) {
     return false;
 }
 
+function checkRequestFriendToMe($user_id, $friend_id) {
+    global $db;
+    $stmt = $db->prepare("SELECT * FROM friend_requests WHERE user_id=? and friend_id=?");
+    $stmt->execute(array($friend_id, $user_id));
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row)
+        return true;
+    return false;
+}
+
 function insertFriendRequest($user_id, $friend_id) {
     global $db;
     $query = $db->prepare("INSERT INTO friend_requests(user_id, friend_id) VALUES(?, ?)");
@@ -146,6 +156,7 @@ function getFriendRequest($id) {
 }
 
 function insertUser($name, $mail, $phone, $pass) {
+    global $db;
     $hashPassword = password_hash($pass, PASSWORD_DEFAULT);
     $sql = "INSERT INTO users(displayname, email, password, phone) VALUES(?, ?, ?, ?)";
     $stmt= $db->prepare($sql);
@@ -244,7 +255,7 @@ function insertComment($user_id, $post_id, $content) {
 
 function getCommentByPost($id) {
     global $db;
-    $query = $db->prepare("SELECT * FROM comments WHERE id=?");
+    $query = $db->prepare("SELECT * FROM comments WHERE post_id=?");
     $query->execute(array($id));
     $rows = $query->fetchAll(PDO::FETCH_ASSOC);
     return $rows;

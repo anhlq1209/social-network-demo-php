@@ -13,6 +13,7 @@
 // }
 
 $r = $_SERVER['DOCUMENT_ROOT'];
-var_dump($r);
+
+var_dump($_ENV, $_SERVER);
 
 ?>

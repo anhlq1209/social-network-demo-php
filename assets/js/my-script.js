@@ -13,4 +13,18 @@ $(document).ready(function () {
             $('#btnChangePasswordRS').addClass('disabled');
         }
     });
+    $('#passwordN').on('input',function(e){
+        if ($('#passwordN').val() == $('#confirmPasswordN').val()) {
+            $('#btnRegister').removeClass('disabled');
+        } else {
+            $('#btnRegister').addClass('disabled');
+        }
+    });
+    $('#confirmPasswordN').on('input',function(e){
+        if ($('#passwordN').val() == $('#confirmPasswordN').val() && $('#btnRegister').hasClass('disabled')) {
+            $('#btnRegister').removeClass('disabled');
+        } else {
+            $('#btnRegister').addClass('disabled');
+        }
+    });
 });

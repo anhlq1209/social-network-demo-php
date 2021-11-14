@@ -23,21 +23,42 @@
             <?php
                 if ($userMain['id'] != $userCur['id']) {
                     if (!checkFriend($userMain['id'], $userCur['id'])) {
-                        if (!checkRequestFriend($userMain['id'], $userCur['id'])) { ?>
-                            <form method="POST" action="/friend/friend-req-handle.php">
-                                <input type="hidden" name="handle_name" value="add_friend">
-                                <input type="hidden" name="user_id" value="<?php echo $_SESSION['userId'] ?>">
-                                <input type="hidden" name="friend_id" value="<?php echo $userCur['id'] ?>">
-                                <button type="submit" class="btn btn-outline-primary" name="form_add_friend">
-                                    <i class="fas fa-user-plus"></i>
-                                    Thêm bạn
-                                </button>
-                            </form>
-                    <?php } else { ?>
+                        if (!checkRequestFriend($userMain['id'], $userCur['id'])) {
+                            if (checkRequestFriendToMe($userMain['id'], $userCur['id'])) { ?>
+                                <form class="align-center" method="POST" action="/friend/friend-req-handle.php">
+                                    <input type="hidden" name="handle_name" value="accept_friend_request">
+                                    <input type="hidden" name="user_id" value="<?php echo $userMain['id'] ?>">
+                                    <input type="hidden" name="friend_id" value="<?php echo $userCur['id'] ?>">
+                                    <input type="hidden" name="page" value="wall">
+                                    <button type="submit" class="btn btn-outline-primary" name="form_accept_friend_request">Chấp nhận</button>
+                                </form>
+                                <form class="align-center" method="POST" action="/friend/friend-req-handle.php">
+                                    <input type="hidden" name="handle_name" value="decline_friend_request">
+                                    <input type="hidden" name="user_id" value="<?php echo $userMain['id'] ?>">
+                                    <input type="hidden" name="friend_id" value="<?php echo $userCur['id'] ?>">
+                                    <input type="hidden" name="page" value="wall">
+                                    <button type="submit" class="btn btn-outline-secondary mt-1" name="form_decline_friend_request">Từ chối</button>
+                                </form>
+                                <?php
+                            } else { ?>
+                                <form method="POST" action="/friend/friend-req-handle.php">
+                                    <input type="hidden" name="handle_name" value="add_friend">
+                                    <input type="hidden" name="user_id" value="<?php echo $userMain['id'] ?>">
+                                    <input type="hidden" name="friend_id" value="<?php echo $userCur['id'] ?>">
+                                    <input type="hidden" name="page" value="wall">
+                                    <button type="submit" class="btn btn-outline-primary" name="form_add_friend">
+                                        <i class="fas fa-user-plus"></i>
+                                        Thêm bạn
+                                    </button>
+                                </form>
+                                <?php 
+                            }
+                        } else { ?>
                             <form method="POST" action="/friend/friend-req-handle.php">
                                 <input type="hidden" name="handle_name" value="cancel_friend_request">
-                                <input type="hidden" name="user_id" value="<?php echo $_SESSION['userId'] ?>">
+                                <input type="hidden" name="user_id" value="<?php echo $userMain['id'] ?>">
                                 <input type="hidden" name="friend_id" value="<?php echo $userCur['id'] ?>">
+                                <input type="hidden" name="page" value="wall">
                                 <button type="submit" class="btn btn-outline-primary" name="form_cancel_friend_request">
                                     <i class="fas fa-user-times"></i>
                                     Hủy lời mời
@@ -47,7 +68,7 @@
                     } else { ?>
                         <form method="POST" action="/friend/friend-req-handle.php">
                             <input type="hidden" name="handle_name" value="unfriend">
-                            <input type="hidden" name="user_id" value="<?php echo $_SESSION['userId'] ?>">
+                            <input type="hidden" name="user_id" value="<?php echo $userMain['id'] ?>">
                             <input type="hidden" name="friend_id" value="<?php echo $userCur['id'] ?>">
                             <button type="submit" class="btn btn-outline-primary" name="form_unfriend">
                                 <i class="fas fa-user-check"></i>

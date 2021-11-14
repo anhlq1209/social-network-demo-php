@@ -1,5 +1,7 @@
 <?php
 session_start();
-unset($_SESSION['userId']);
+if (isset($_SESSION['userId'])) {
+    unset($_SESSION['userId']);
+}
 header('Location: /index.php');
 ?>

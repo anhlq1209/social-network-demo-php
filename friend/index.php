@@ -20,7 +20,7 @@
                     <div class="card mt-3">
                         <div class="card-body my-row space-between">
                             <div class="align-center">
-                                <a class="card-avatar card-avatar--small me-2" href="/user/wall.php?id=<?php echo $f_user['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('/assets/images/avatars/<?php echo $f_user['avatar'] ?>')"></a>
+                                <a class="card-avatar card-avatar--small rounded-circle me-2" href="/user/wall.php?id=<?php echo $f_user['id'] ?>" class="avatar avatar--small rounded-circle dp--inline-block" style="background-image:url('/assets/images/avatars/<?php echo $f_user['avatar'] ?>')"></a>
                                 <a class="card-name" href="/user/wall.php?id=<?php echo $f_user['id'] ?>" class="card-title"><?php echo $f_user['displayname'] ?></a>
                             </div>
                             <div class="pull-right my-col justify-align-center">
